@@ -1,0 +1,14 @@
+
+
+.product-view .productviewcart .add-to-box{
+    margin-top: 0px !important;
+}
+.repair-div{
+    height: 20px;
+}
+
+.price-div{
+    border-bottom: solid black 1px;
+    /* filter: blur(2px); */
+    font-family: Arial, sans-serif
+}

@@ -1,0 +1,51 @@
+
+{
+  "manifest_version": 3,
+  "name": "New CPR7H Price Tool",
+  "version": "1.0",
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "Labor Settings"
+  },
+  "permissions": ["storage"],
+   "content_scripts": [ {
+      "css": [ "src/inject/inject.css" ],
+      "matches": [
+  "*://*.mobiledefenders.com/*",
+  "*://*.mobilesentrix.com/*",
+  "*://*.cpr.parts/*"
+]
+   }, {
+    "js": [
+    "src/laborConfig.js",
+    "src/inject/helper.js",
+    "src/inject/inject.js"
+  ],
+  "matches": [
+    "*://*.mobiledefenders.com/*",
+    "*://*.mobilesentrix.com/*",
+    "*://*.cpr.parts/*"
+  ]
+} ],
+
+"options_ui": {
+  "page": "src/options.html",
+  "open_in_tab": true
+},
+
+   "default_locale": "en",
+   "description": "Repair price display tool for Mobilesentrix.",
+   "differential_fingerprint": "1.7af7dc6be0943908e08ab6cd119534628dd7b9b21cc909425b5287a8bc6220b5",
+   "homepage_url": "http://fake.com",
+   "host_permissions": [
+  "*://*.mobiledefenders.com/*",
+  "*://*.mobilesentrix.com/*",
+  "*://*.cpr.parts/*"
+],
+   "icons": {
+      "128": "icons/icon128.png",
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+   }
+}
+
