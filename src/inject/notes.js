@@ -4,6 +4,7 @@
 (() => {
   /* ---- 1.  bail-out if we are on the login page ---------- */
   if (location.href.includes('account/login')) return;
+  if(!location.href.includes("replacement-parts")) return;
 
   const CONTAINER_ID = 'device-notes-container';
   const STORAGE_KEY  = 'deviceNotes';
