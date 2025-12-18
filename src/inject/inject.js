@@ -17,22 +17,21 @@ async function main() {
   const blacklist = ["tools", "brands/", "refurbishing", "accessories", "checkout"];
   if (blacklist.some((word) => url.includes(word))) return;
 
+
+  const switch_device = ["switch"];
   const tablets  = ["ipad", "surface", "galaxy-tab", "samsung/tab"];
   const consoles = ["game-console", "sony", "xbox", "nintendo", "macbook", "imac"];
-
+  
   const config = await loadConfig();
   const defs = config.defaults;
 
   // Base labor from config, not hardcoded
   let baseLabor = defs.phone;
 
-  if (tablets.some((word) => url.includes(word)))  baseLabor = defs.tablet;
-  if (consoles.some((word) => url.includes(word))) baseLabor = defs.console; // or defs.computer for Macs
-  console.log("URL:", url);
-console.log("Config loaded:", config);
-console.log("Base labor set to:", baseLabor);
-console.log("Is it a console URL?", consoles.some((word) => url.includes(word)));
-console.log("Is it a computer URL?", url.includes("macbook") || url.includes("imac"));
+  if (switch_device.some((word) => url.includes(word)))  baseLabor = defs.switch;
+  if (consoles.some((word)  => url.includes(word)) && !url.includes(switch_device)) baseLabor = defs.console; 
+  if (tablets.some((word) => url.includes(word)))  baseLabor = defs.switch;
+
   // Initial pass
   addPrices(baseLabor, config);
 
@@ -85,53 +84,79 @@ function loadConfig() {
   });
 }
 
+
+
 function addHTML(labor, part_item, url) {
-    var cost = part_item.textContent;
-    cost = cost.replace('$', '');
-    var repair_price = calcRepair(Number(cost), labor); 
+    // 🔹 1) Skip if this price is inside a summary/subtotal container
+    let el = part_item;
+    while (el && el !== document.body) {
+        // Look at class, id, and aria-label
+        const meta =
+            (el.className || '') + ' ' +
+            (el.id || '') + ' ' +
+            (el.getAttribute && el.getAttribute('aria-label') || '');
 
-    var repair_div = document.createElement('div');
-    repair_div.style.color      = "#e3051b";
-    repair_div.style.fontFamily = "Arial, sans-serif";
-    repair_div.style.fontWeight = "bold";
-    repair_div.className        = "price-div";
+        const lower = meta.toLowerCase();
 
-    var costs_div = document.createElement('div');
-    costs_div.className   = "repair-div";
-    costs_div.style.color = "black";
-    costs_div.style.fontSize = "14px";
-    
-    if (url.includes("mobiledefenders")) {
-        repair_div.style.paddingTop    = "5px";
-        repair_div.style.paddingBottom = "5px";
+        if (lower.includes('summary') || lower.includes('subtotal') || lower.includes('product-details')) {
+            // Don't inject into order summary / cart subtotal / etc.
+            return;
+        }
+
+        el = el.parentElement;
     }
 
-    repair_div.style.display = "inline";
+    // 🔹 2) Normal logic below
 
-    var breakr  = document.createElement("br");
-    var breakr2 = document.createElement("br");
+    const costText = part_item.textContent || '';
+    const cost = costText.replace('$', '');
+    const repair_price = calcRepair(Number(cost), labor);
 
-    repair_div.appendChild(document.createTextNode(" Repair Price: $" + repair_price));
-    repair_div.appendChild(breakr);
-    repair_div.appendChild(breakr2);
+    // Build a small table with Part Price, Labor, and Repair Price
+    const partPrice = Math.max(0, repair_price - Number(labor || 0));
 
-    var part_price = repair_price + 0.01 - labor;
-    costs_div.appendChild(
-        document.createTextNode(
-            "Part Price: $" + Number(part_price - 0.01) + " • Labor: $" + labor
-        )
+    const table = document.createElement('table');
+    table.className = 'repair-table';
+    table.style.fontFamily = 'Arial, sans-serif';
+    table.style.fontSize = '14px';
+
+    const tbody = document.createElement('tbody');
+
+    const makeRow = (label, value, valueClass) => {
+        const tr = document.createElement('tr');
+        const tdLabel = document.createElement('td');
+        tdLabel.textContent = label;
+        tdLabel.className = 'repair-table-label';
+        const tdValue = document.createElement('td');
+        tdValue.textContent = value;
+        tdValue.className = valueClass || 'repair-table-value';
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdValue);
+        return tr;
+    };
+
+    // (You had Part Price twice before – now just once)
+    tbody.appendChild(makeRow('Part Price:', '$' + partPrice.toFixed(2)));
+    tbody.appendChild(makeRow('Labor:', '$' + Number(labor).toFixed(2)));
+    tbody.appendChild(
+        makeRow('Repair Price:', '$' + Number(repair_price).toFixed(2), 'repair-table-repair')
     );
 
-    var parent = part_item.parentElement;
-    parent.insertBefore(breakr, parent.lastChild);
-    if (!url.includes("replacement-parts") & url.includes("cpr.parts")) {
-        parent.insertBefore(breakr2, parent.lastChild);
+    table.appendChild(tbody);
+
+    const container = document.createElement('div');
+    container.className = 'repair-container';
+
+    if (!url.includes('replacement-parts') && url.includes('cpr.parts')) {
+        const spacer = document.createElement('br');
+        container.appendChild(spacer);
     }
 
-    parent.insertBefore(repair_div, parent.lastChild);
-    parent.insertBefore(costs_div, parent.lastChild);
-}
+    container.appendChild(table);
 
+    const parent = part_item.parentElement;
+    if (parent) parent.appendChild(container);
+}
 
 
 

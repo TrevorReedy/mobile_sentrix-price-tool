@@ -50,8 +50,10 @@ function getLaborSingle(part_item, baseLabor, config) {
 
   const name = heading.textContent.toLowerCase();
 
-
-  if (name.includes("soldering required")) {
+  if (name.includes("casper")) {
+    perItemLabor = 0;
+  }
+  else if (name.includes("soldering required")) {
     perItemLabor = adv.soldering;
   } else if (name.includes("charging") && name.includes("port")) {
   perItemLabor = adv.chargePort;

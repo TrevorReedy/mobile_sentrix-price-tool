@@ -8,6 +8,8 @@ function loadOptions() {
     document.getElementById("tablet").value      = cfg.defaults.tablet;
     document.getElementById("computer").value    = cfg.defaults.computer;
     document.getElementById("console").value     = cfg.defaults.console;
+    document.getElementById("switch").value      = cfg.defaults.switch
+
     document.getElementById("backHousing").value = cfg.advanced.backHousing;
     document.getElementById("soldering").value   = cfg.advanced.soldering;
     document.getElementById("chargeport").value   = cfg.advanced.chargePort;
@@ -21,6 +23,7 @@ function saveOptions() {
       tablet: Number(document.getElementById("tablet").value),
       computer: Number(document.getElementById("computer").value),
       console: Number(document.getElementById("console").value),
+      switch: Number(document.getElementById("switch").value),
     },
     advanced: {
       backHousing: Number(document.getElementById("backHousing").value),

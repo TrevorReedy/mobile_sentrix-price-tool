@@ -7,15 +7,19 @@ function loadPopup() {
     const tablet      = document.getElementById("tablet");
     const computer    = document.getElementById("computer");
     const consoleInp  = document.getElementById("console");
+    const switchInp   = document.getElementById("switch");
+
     const backHousing = document.getElementById("backHousing");
     const soldering   = document.getElementById("soldering");
     const chargePort   = document.getElementById("chargeport");
-
+    
   
     phone.placeholder       = defs.defaults.phone;
     tablet.placeholder      = defs.defaults.tablet;
     computer.placeholder    = defs.defaults.computer;
     consoleInp.placeholder  = defs.defaults.console;
+    switchInp.placeholder   = defs.defaults.switch;
+
     backHousing.placeholder = defs.advanced.backHousing;
     soldering.placeholder   = defs.advanced.soldering;
     chargePort.placeholder = defs.advanced.chargePort;
@@ -25,6 +29,7 @@ function loadPopup() {
       if (stored.defaults.tablet != null)     tablet.value     = stored.defaults.tablet;
       if (stored.defaults.computer != null)   computer.value   = stored.defaults.computer;
       if (stored.defaults.console != null)    consoleInp.value = stored.defaults.console;
+      if (stored.defaults.switch != null)     switchInp.value = stored.defaults.switch;
     }
 
     if (stored.advanced) {
