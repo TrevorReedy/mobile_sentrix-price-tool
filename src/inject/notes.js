@@ -119,6 +119,8 @@
     );
   }
 
+
+
   /* -------------- bootstrap -------------------------------- */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', inject);
@@ -135,4 +137,24 @@
       setTimeout(inject, 1000);
     }
   }).observe(document, {subtree: true, childList: true});
-})();
+
+  /* -------------- expose for tests ------------------------- */
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { inject };
+}
+
+})();const { inject } = require('../../src/inject/notes.js');   // export inject() for testing
+
+beforeEach(() => document.body.innerHTML = '');
+
+test('injects textarea under h1 when on replacement-parts page', async () => {
+  document.body.innerHTML = `
+    <h1 class="category-title">iPhone 12 Pro Max</h1>
+  `;
+  location.href = 'https://cpr.parts/replacement-parts/iphone-12-pro-max';
+  await inject();
+  expect(document.querySelector('textarea')).toBeTruthy();
+  expect(document.querySelector('textarea').placeholder)
+    .toMatch(/Add notes for this device/);
+});
+

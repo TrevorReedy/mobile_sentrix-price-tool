@@ -113,3 +113,5 @@ function calcRepair(partcost,labor){
         var rounded = Math.ceil(price / 10) * 10;
 	return Math.round(rounded) - .01;
 }
+
+module.exports = { calcRepair };
