@@ -88,21 +88,10 @@ Adds a “Device Notes” textarea near the page title on certain pages and save
 4. Click **Load unpacked**.
 5. Select the repo folder (the one containing `manifest.json`).
 
-Now browse to a supported site/page and you should see:
+Now browse to a mobile sentrix site/page and you should see:
 - Repair price tables + “Add to cart” buttons near prices
 - The Repair Calculator sidebar injected into the page
 
 ---
 
-## Using it via Chrome DevTools Console
 
-Open DevTools on a supported page:
-- Right click → Inspect → Console tab
-
-Useful globals are exposed by the injector modules:
-
-### Force a re-injection pass
-If the page loads content late and you don’t see UI:
-```js
-// Trigger your price injection manually if needed:
-window.addPrices?.(0, window.__CPR_LABOR__?.config);
