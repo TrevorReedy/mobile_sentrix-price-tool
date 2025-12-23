@@ -30,7 +30,6 @@
       ],
       "js": [
         "src/laborConfig.js",
-        "src/deviceLinkConfig.js",
         "src/repairCalc/repairCart.js",
         "src/inject/notes.js",
         "src/inject/helper.js",
