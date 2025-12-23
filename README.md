@@ -1,4 +1,4 @@
-# CPR Price Tool (Chrome Extension)
+# Mobile Sentrix Price Tool (Chrome Extension)
 
 A developer-focused Chrome extension that injects:
 - A **repair price breakdown table** next to product prices
