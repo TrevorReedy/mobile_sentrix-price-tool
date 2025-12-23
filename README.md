@@ -3,7 +3,7 @@
 A developer-focused Chrome extension that injects:
 - A **repair price breakdown table** next to product prices
 - A floating **Repair Calculator cart**
-- Customizable labor values
+- Customizable labor values 
 - **Per-item “Include labor” toggles** (first item defaults ON, additional items default OFF)
 - Optional **Device Notes** textarea (auto-saves per device)
 
@@ -37,18 +37,8 @@ Includes **Clear** button.
 
 ---
 
-### 3) Per-Item Labor Toggle (NO global labor toggle)
-Each item in the cart can individually include/exclude labor:
-- **Item 1** defaults to **Include labor = ON**
-- If you add a 2nd item (or more), those default to **OFF**
-
-This matches the “take the highest labor once” workflow (you can manually re-enable labor on the one you want).
-
-**Where it lives:** `src/inject/repairCart.js`
-
----
-
-### 4) Labor Rules (Device Type + Advanced Overrides)
+### 3) Labor Rules (Device Type + Advanced Overrides)
+**FOUND BY CLICKING THE EXTENSION ICON**
 Labor is computed per product using:
 - **Device type detection** (phone/tablet/switch/computer/console)
 - Default labor per device type
@@ -62,7 +52,7 @@ Labor is computed per product using:
 
 ---
 
-### 5) SPA / Dynamic Page Support
+### 4) SPA / Dynamic Page Support
 The injector re-runs automatically when content changes:
 - MutationObserver watches DOM changes
 - Re-run on `popstate` and `hashchange`
@@ -71,7 +61,7 @@ The injector re-runs automatically when content changes:
 
 ---
 
-### 6) Device Notes (Auto-save per device)
+### 5) Device Notes (Auto-save per device)
 Adds a “Device Notes” textarea near the page title on certain pages and saves notes keyed by device.
 
 **Where it lives:** `src/inject/notes.js`
