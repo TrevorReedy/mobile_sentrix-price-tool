@@ -2,7 +2,7 @@
  * helper.js - Creates repair tables and buttons
  */
 
-// ---------- Labor logic (defaults by device type) ----------
+// ---------- Labor logic  ----------
 function pickDeviceType(url, name) {
   const u = String(url || "").toLowerCase();
   const n = String(name || "").toLowerCase();
@@ -75,13 +75,13 @@ function getLaborSingle(part_item, baseLabor, config, url) {
   const fallback = Number(baseLabor) || 0;
   const defaultForType = Number(defaults[deviceType]);
 
-  // Baseline labor comes from config.defaults (LaborConfig source of truth)
+  // Baseline labor comes from config.defaults
   let perItemLabor =
     (Number.isFinite(defaultForType) && defaultForType > 0)
       ? defaultForType
       : fallback;
 
-  // Advanced overrides (kept)
+  // Advanced overrides
   if (name.includes("casper")) {
     perItemLabor = 0;
   } else if (name.includes("soldering required")) {
@@ -105,7 +105,7 @@ function getLaborSingle(part_item, baseLabor, config, url) {
   return perItemLabor;
 }
 
-// ---------- Price calc (unchanged) ----------
+// ---------- Price calc ----------
 function calcRepair(partcost, labor) {
   var mult;
   if (partcost > 0 && partcost <= 9.99) mult = 5;

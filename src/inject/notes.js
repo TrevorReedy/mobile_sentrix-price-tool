@@ -139,10 +139,6 @@
     }
   }).observe(document, {subtree: true, childList: true});
 
-  // expose for tests
-  // if (typeof module !== 'undefined' && module.exports) {
-  //   module.exports = { inject, waitForAny };
-  // }
 
 
   // single bootstrap (only once)
@@ -152,7 +148,6 @@
   
 
 })();
-// const { inject, waitForAny } = require('../../src/inject/notes.js');   // export inject() for testing
 
 beforeEach(() => document.body.innerHTML = '');
 
