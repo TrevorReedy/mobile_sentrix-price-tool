@@ -12,7 +12,7 @@ function loadOptions() {
 
     document.getElementById("backHousing").value = cfg.advanced.backHousing;
     document.getElementById("soldering").value   = cfg.advanced.soldering;
-    document.getElementById("chargeport").value   = cfg.advanced.chargePort;
+    document.getElementById("iphoneChargePort").value   = cfg.advanced.chargePort;
   });
 }
 

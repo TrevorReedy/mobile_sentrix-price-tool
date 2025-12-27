@@ -1,4 +1,3 @@
-
 /**
  * inject.js - INJECTOR MODULE
  * Handles: UI injection, settings loading, DOM observation
@@ -18,32 +17,24 @@
   };
 
   // ---- CONFIG HANDLING ----
-  const DEFAULT_CONFIG = {
-    defaults: {
-      phone: 75,
-      tablet: 100,
-      switch: 100,
-      computer: 130,
-      console: 130,
-    },
-    advanced: {
-      iphoneChargePort: 100,
-      backHousing: 100,
-      soldering: 130,
-    },
-  };
-
   async function loadLaborSettings() {
     try {
       const keys = ["rate", "laborRate", "baseLabor", "config", "laborConfig"];
       let res = {};
 
-      // Try chrome storage
+      // Try chrome storage (sync first, then local)
       if (typeof chrome !== "undefined" && chrome.storage) {
         try {
+          // Try sync first
           res = await new Promise((resolve) => {
-            chrome.storage.local.get(keys, (result) => resolve(result || {}));
+            chrome.storage.sync.get(keys, (result) => resolve(result || {}));
           });
+          // If sync is empty, try local
+          if (!res.laborConfig) {
+            res = await new Promise((resolve) => {
+              chrome.storage.local.get(keys, (result) => resolve(result || {}));
+            });
+          }
           console.log("Loaded from storage:", res);
         } catch (e) {
           console.log("Could not load from chrome storage:", e);
@@ -53,25 +44,30 @@
       // Get rate (fallback only)
       let rate = Number(res.rate) || Number(res.laborRate) || Number(res.baseLabor) || 0;
 
-      // Get config (storage override), else source-of-truth
+      // Get config (storage override), else use the shared DEFAULT_CONFIG
       let config = res.config || res.laborConfig;
       if (!config) {
         console.log("No config in storage, using default config.");
-        config = DEFAULT_CONFIG;
+        config = (typeof window !== "undefined" && window.CPR_LABOR_DEFAULT_CONFIG) || {
+          defaults: { phone: 75, tablet: 100, switch: 100, computer: 130, console: 130 },
+          advanced: { iphoneChargePort: 100, backHousing: 100, soldering: 130 }
+        };
       } else {
         console.log("Using config from storage override:", config);
       }
 
       // Merge storage override ON TOP of default config
+      const baseDefaults = (typeof window !== "undefined" && window.CPR_LABOR_DEFAULT_CONFIG && window.CPR_LABOR_DEFAULT_CONFIG.defaults) || {};
+      const baseAdvanced = (typeof window !== "undefined" && window.CPR_LABOR_DEFAULT_CONFIG && window.CPR_LABOR_DEFAULT_CONFIG.advanced) || {};
       config = {
-        defaults: { ...DEFAULT_CONFIG.defaults, ...(config.defaults || {}) },
-        advanced: { ...DEFAULT_CONFIG.advanced, ...(config.advanced || {}) },
+        defaults: { ...baseDefaults, ...(config.defaults || {}) },
+        advanced: { ...baseAdvanced, ...(config.advanced || {}) },
       };
 
       return { rate, config };
     } catch (e) {
       console.error("loadLaborSettings failed:", e);
-      return { rate: 0, config: DEFAULT_CONFIG };
+      return { rate: 0, config: (typeof window !== "undefined" && window.CPR_LABOR_DEFAULT_CONFIG) || {} };
     }
   }
 
@@ -125,7 +121,7 @@
     };
   }
 
-  let SETTINGS = { rate: 0, config: DEFAULT_CONFIG };
+  let SETTINGS = { rate: 0, config: {} };
   let RepairCart = null;
 
   async function runPass() {
