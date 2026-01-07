@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "CPR Repair Calculator + Notes",
+  "name": "Mobile Sentrix CPR Repair Calculator + Notes",
   "version": "0.1.0",
   "description": "Displays repair pricing and adds per-device notes on supported supplier sites.",
 
@@ -49,8 +49,8 @@
   "*://*.cpr.parts/*"
 ],
    "icons": {
-      "128": "icons/icon128.png",
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png"
+      "128": "icons/tag-price128.png",
+      "16": "icons/tag-price16.png",
+      "48": "icons/tag-price48.png"
    }
 }

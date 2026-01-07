@@ -1,4 +1,3 @@
-
 // repairCart.js - CORE CART LOGIC MODULE
 const RepairCart = (() => {
   const cart = new Map();
@@ -64,6 +63,9 @@ const RepairCart = (() => {
         console.error(`Cart container #${this.containerId} not found`);
         return;
       }
+      
+      // Show/hide the container based on cart size
+      container.style.display = cart.size ? "block" : "none";
 
       const emptyEl = container.querySelector("#rcEmpty");
       const listEl = container.querySelector("#rcList");
