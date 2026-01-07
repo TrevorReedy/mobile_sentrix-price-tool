@@ -1,4 +1,8 @@
+/* 
+notes section for users to be able to add customized notes
+ with devices or repairs
 
+*/
 
 (() => {
   /* ---- 1.  bail-out if we are on the login page ---------- */
