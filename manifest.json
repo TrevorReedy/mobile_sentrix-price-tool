@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Mobile Sentrix CPR Repair Calculator + Notes",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "Displays repair pricing and adds per-device notes on supported supplier sites.",
 
   "permissions": ["storage"],

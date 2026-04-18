@@ -69,7 +69,7 @@ notes section for users to be able to add customized notes
     return slugifyKey(key);
   }
 
-  /* -------------- UI (NO iFixit link) ---------------------- */
+  /* -------------- UI ---------------------- */
   function createNotesUI(notesKey, deviceName) {
     const container = document.createElement('div');
     container.id = CONTAINER_ID;

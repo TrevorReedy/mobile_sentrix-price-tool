@@ -94,8 +94,11 @@ function getLaborSingle(part_item, baseLabor, config, url) {
   ) {
     const adv = Number(advanced.iphoneChargePort);
     if (Number.isFinite(adv) && adv > 0) perItemLabor = adv;
-  } else if (name.includes("back") && name.includes("housing") 
-    || name.includes("mid-frame") &&
+  } else if (
+    (
+      (name.includes("back") && name.includes("housing")) ||
+      name.includes("mid-frame")
+    ) &&
     String(url || "").toLowerCase().includes("iphone")
   ) {
     const adv = Number(advanced.backHousing);
@@ -105,20 +108,23 @@ function getLaborSingle(part_item, baseLabor, config, url) {
   return perItemLabor;
 }
 
-// ---------- Price calc ----------
-function calcRepair(partcost, labor) {
-  var mult;
-  if (partcost > 0 && partcost <= 9.99) mult = 5;
-  else if (partcost >= 10 & partcost <= 24.99) mult = 2.5;
-  else if (partcost >= 25 & partcost <= 49.99) mult = 2.25;
-  else if (partcost >= 50 & partcost <= 99.99) mult = 2.00;
-  else if (partcost >= 100 & partcost <= 199.99) mult = 1.5;
-  else if (partcost >= 200) mult = 1.25;
-  else mult = 1;
+// ---------- Markup + Price calc ----------
+function getMarkupMultiplier(partcost, markupCfg) {
+  const m = markupCfg || {};
+  if (partcost > 0 && partcost <= 9.99) return Number(m.level_1) || 0;
+  if (partcost >= 10 && partcost <= 24.99) return Number(m.level_2) || 0;
+  if (partcost >= 25 && partcost <= 49.99) return Number(m.level_3) || 0;
+  if (partcost >= 50 && partcost <= 99.99) return Number(m.level_4) || 0;
+  if (partcost >= 100 && partcost <= 199.99) return Number(m.level_5) || 0;
+  if (partcost >= 200) return Number(m.level_6) || 0;
+  return 0;
+}
 
-  var price = (partcost * mult) + labor;
-  var rounded = Math.ceil(price / 10) * 10;
-  return Math.round(rounded) - .01;
+function calcRepair(partcost, labor, markupCfg) {
+  const mult = getMarkupMultiplier(partcost, markupCfg);
+  const price = (partcost * mult) + labor;
+  const rounded = Math.ceil(price / 10) * 10;
+  return Math.round(rounded) - 0.01;
 }
 
 function parseMoney(text) {
@@ -150,8 +156,17 @@ function stableId(priceEl) {
   return `${location.href}::${txt}::${priceEl.offsetTop}`;
 }
 
+// Helper function to check if element is inside a cart container
+function isInCartContainer(el) {
+  if(el.parentElement.className == "np-cart")return true
+
+  return !!el.closest(
+    '.minicart, .mini-products-list, .checkout-container, .opc'
+  );
+}
+
 // ---------- Main DOM injection ----------
-function addPrices(rate, config) {
+function addPrices(rate, config, markup) {
   const url = document.URL;
   if (!(url.includes("sentrix") || url.includes("defenders") || url.includes("cpr"))) return;
 
@@ -159,17 +174,38 @@ function addPrices(rate, config) {
   if (!allPriceElements.length) return;
 
   for (const priceEl of allPriceElements) {
-    // avoid cart/checkout areas
-    
+    // Check if element is inside any cart container
+    if (isInCartContainer(priceEl)) {
+      console.log("Skipping price element in cart container due to ->" + priceEl.parentElement.className);
+      continue;
+    }
+
+    // Additional safety checks for cart areas
     if (
-        priceEl.closest(".block-content.showcart-1.display_cart") ||
+      priceEl.closest(".block-content.showcart-1.display_cart") ||
       priceEl.closest("#np-cart") ||
-      priceEl.closest(".np-cart") ||
+      // priceEl.closest(".np-cart") ||
       priceEl.closest(".cart") ||
       priceEl.closest(".minicart") ||
       priceEl.closest(".checkout") ||
-      priceEl.closest("mini-products-list")
-  
+      priceEl.closest(".summary") ||
+      priceEl.closest("mini-products-list") ||
+      priceEl.closest(".cart-index") ||
+      priceEl.closest(".checkout-index") ||
+      priceEl.closest(".opc")
+    ) {
+      continue;
+    }
+
+    // Check if we're on a cart/checkout page by URL
+    const currentUrl = url.toLowerCase();
+    if (
+      currentUrl.includes('/cart') ||
+      currentUrl.includes('/checkout') ||
+      currentUrl.includes('/basket') ||
+      currentUrl.includes('/order') ||
+      currentUrl.includes('/payment') ||
+      currentUrl.includes('/shipping')
     ) {
       continue;
     }
@@ -178,7 +214,9 @@ function addPrices(rate, config) {
     if (!partCost) continue;
 
     const labor = getLaborSingle(priceEl, rate, config, url);
-    const repair_price = calcRepair(partCost, labor);
+
+    // ✅ markup now comes from the function arg
+    const repair_price = calcRepair(partCost, labor, markup);
     const partPrice = Math.max(0, repair_price - Number(labor || 0));
 
     const parent = priceEl.parentElement;
