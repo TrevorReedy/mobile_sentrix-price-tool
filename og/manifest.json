@@ -1,0 +1,23 @@
+{
+   "content_scripts": [ {
+      "css": [ "src/inject/inject.css" ],
+      "matches": [ "https://www.mobiledefenders.com/*", "https://www.mobilesentrix.com/*", "https://www.cpr.parts/*" ]
+   }, {
+      "js": [ "src/inject/helper.js", "src/inject/inject.js" ],
+      "matches": [ "https://www.mobiledefenders.com/*", "https://www.mobilesentrix.com/*", "https://www.cpr.parts/*" ]
+   } ],
+   "default_locale": "en",
+   "description": "Repair price display tool for Mobilesentrix.",
+   "homepage_url": "http://fake.com",
+   "host_permissions": [ "https://www.mobiledefenders.com/*", "https://www.mobilesentrix.com/*", "https://www.cpr.parts/*" ],
+   "icons": {
+      "128": "icons/icon128.png",
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqaqbWmgY3Xe4FSZARgWUZYRBQy6bnPg8dtpnzVxWFELvppCnV7tEI2yVw2jVT/5ayqsJItEyfe/5LMpL8K2A4ZyC4VBRbR6zeZZl5nDgm3LH9x4S7Vibmev6GiZn9nc3BA0DFYXUxaSFyIL+w3T/H0CfMoNQcKFm7vOnky9/OOuTyhSCJrQGmmONNF/ti4RWWSFXJp2cNlq+0MPFJRqaCyawjkxqnpaTPJJqeqSlGhkKtykt+uV2nDuy3uW7JJVxCrtlk/O4XwcGCVmNLobpHz/S0OdFDV1SZwC2L2PWrGkDe5HRx62zfnR+LgRwfbf/K2UWcz2njESGwyw6x5kk/wIDAQAB",
+   "manifest_version": 3,
+   "name": " CPR7H Pricing Tool",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.2.0"
+}
