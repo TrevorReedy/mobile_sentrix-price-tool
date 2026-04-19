@@ -55,7 +55,7 @@ main();
 ```
 This logic executed exactly once. Any content loaded after initial execution was invisible to the extension.
 
-V1 DOM Loop (One-Pass Injection)
+## V1 DOM Loop (One-Pass Injection)
 ```js
 function addPrices(labor) {
   const url = document.URL;
@@ -117,7 +117,7 @@ Instead of reprocessing the entire DOM on every injection pass, the extension ex
 
 Each eligible price element is marked with a lightweight data-* attribute after injection. Subsequent passes query only for elements lacking this marker, guaranteeing that each product is processed exactly once.
 
-Key implications:
+# Key implications:
 
 Performance becomes proportional to newly loaded content
 
@@ -143,7 +143,7 @@ Together with debouncing, guarded incremental injection forms the backbone of th
 Decoupling Pricing Logic with chrome.storage.sync
 Labor defaults were originally hardcoded, creating a deployment bottleneck. I replaced this with a declarative configuration model backed by chrome.storage.sync.
 
-Loading and Merging Configuration
+# Loading and Merging Configuration
 ```js
 chrome.storage.sync.get(["laborConfig"], (result) => {
   const cfg = result.laborConfig || {};
@@ -167,7 +167,7 @@ chrome.storage.sync.get([STORAGE_KEY], (res) => {
 
 chrome.storage.sync.set({ [STORAGE_KEY]: notes });
 ```
-Conclusion: From Hacks to a Stable System
+## Conclusion: From Hacks to a Stable System
 What began as a quick DOM hack evolved into a stable, configurable, and resilient pricing system. This project forced me to confront real-world constraints: SPAs, performance, state management, and human trust in automation.
 
 The result is a system I’m proud of—one that behaves deterministically, scales with the application it lives in, and can evolve without constant redeployment.
