@@ -175,10 +175,10 @@ function addPrices(rate, config, markup) {
 
   for (const priceEl of allPriceElements) {
     // Check if element is inside any cart container
-    if (isInCartContainer(priceEl)) {
-      console.log("Skipping price element in cart container due to ->" + priceEl.parentElement.className);
-      continue;
-    }
+    // if (isInCartContainer(priceEl)) {
+    //   console.log("Skipping price element in cart container due to ->" + priceEl.parentElement.className);
+    //   continue;
+    // }
 
     // Additional safety checks for cart areas
     if (
@@ -219,8 +219,9 @@ function addPrices(rate, config, markup) {
     const repair_price = calcRepair(partCost, labor, markup);
     const partPrice = Math.max(0, repair_price - Number(labor || 0));
 
-    const parent = priceEl.parentElement;
-    if (!parent) continue;
+    const parent =
+    priceEl.closest(".product-listing-item") || priceEl.parentElement
+  if (!parent) continue;
 
     const container = document.createElement("div");
     container.className = "repair-container";
@@ -252,6 +253,7 @@ function addPrices(rate, config, markup) {
         window.RepairCart.toggleItem(this);
       }
     };
+
 
     container.appendChild(btn);
     parent.appendChild(container);
