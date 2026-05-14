@@ -184,7 +184,7 @@ function addPrices(rate, config, markup) {
     if (
       priceEl.closest(".block-content.showcart-1.display_cart") ||
       priceEl.closest("#np-cart") ||
-      // priceEl.closest(".np-cart") ||
+      priceEl.closest("#cartblock") ||
       priceEl.closest(".cart") ||
       priceEl.closest(".minicart") ||
       priceEl.closest(".checkout") ||
