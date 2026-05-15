@@ -55,9 +55,9 @@ function pickDeviceType(url, name) {
 }
 
 function getHeadingTextNear(part_item) {
-  let container = part_item.closest("li.item, .product-item, .item, .product-view, .product-essential");
+  let container = part_item.closest(".ne-product-name,li.item, .product-item, .item, .product-view, .product-essential");
   let heading = container
-    ? container.querySelector("h2.product-name, h1, .product-name, .page-title")
+    ? container.querySelector(".ne-product-name a, .ne-product-name, h2.product-name, h1, .product-name, .page-title")
     : null;
 
   if (!heading) heading = document.querySelector("h1, h2.product-name, .product-name, .page-title");

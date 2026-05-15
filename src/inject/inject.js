@@ -190,7 +190,7 @@ function injectCartHTML() {
   let RepairCart = null;
 
   async function runPass() {
-    console.log("Running injection pass...");
+    
 
     // 1. Inject HTML
     injectCartHTML();

@@ -176,7 +176,7 @@ const RepairCart = (() => {
 
     updateButtonState: function(btn, isInCart) {
       if (!btn) return;
-      btn.textContent = isInCart ? "Remove from cart" : "Add to Calculator";
+      btn.textContent = isInCart ? "Remove from Calculator" : "Add to Calculator";
       btn.classList.toggle("added", isInCart);
       btn.dataset.inCart = isInCart ? "1" : "0";
     },
